@@ -1,0 +1,23 @@
+# Python 관련
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+venv/ 
+
+
+# 환경변수 파일 및 민감한 키 파일 제외
+.env
+eternal-petal-455604-d6-eba6d6441ac0.json
+
+# log 파일 제외
+*.log
+
+# 기타 불필요한 파일들
+*.tmp
+
+# IDE 관련
+.idea/
+.vscode/
+
+
