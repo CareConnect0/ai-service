@@ -14,5 +14,6 @@ if not google_credentials:
 app = FastAPI()
 
 # STT API 라우터 포함
-from app.routers import stt
-app.include_router(stt.router, prefix="/api/ai", tags=["STT"])
+from app.routers import stt_schedule, stt_raw
+app.include_router(stt_schedule.router, prefix="/api/ai", tags=["STT"])
+app.include_router(stt_raw.router, prefix="/api/ai", tags=["STT"])
