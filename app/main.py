@@ -11,7 +11,11 @@ if not google_credentials:
     print("⚠️ GOOGLE_APPLICATION_CREDENTIALS가 설정되지 않았습니다.")
 
 # FastAPI 앱 생성
-app = FastAPI()
+app = FastAPI(
+    title="CareConnect",
+    version="0.1.0",
+    description="CareConnect AI API"
+)
 
 # STT API 라우터 포함
 from app.routers import stt_schedule, stt_raw
