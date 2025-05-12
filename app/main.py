@@ -12,7 +12,6 @@ google_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 if not google_credentials:
     print("⚠️ GOOGLE_APPLICATION_CREDENTIALS가 설정되지 않았습니다.")
 
-
 # FastAPI 앱 생성
 app = FastAPI(
     title="CareConnect",
