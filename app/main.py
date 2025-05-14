@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
 import os
-from app.routers import stt_schedule, stt_raw
+from app.routers import stt_schedule, stt_raw, emergency_detection
 from app.routers.tts import router as tts_router
 
 # .env 환경 변수 로드
@@ -22,4 +22,5 @@ app = FastAPI(
 # 라우터 등록
 app.include_router(stt_schedule.router, prefix="/api/ai", tags=["STT"])
 app.include_router(stt_raw.router, prefix="/api/ai", tags=["STT"])
+app.include_router(emergency_detection.router, prefix="/api/ai", tags=["Emergency"])
 app.include_router(tts_router)
