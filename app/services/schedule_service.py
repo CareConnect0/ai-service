@@ -1,25 +1,28 @@
 from datetime import datetime
 import requests
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 def fetch_today_schedule() -> str:
     try:
-        # 실제 api 호출할때 코드!
-        # today = datetime.today().strftime("%Y-%m-%d")
-        # response = requests.get(
-        #     "http://3.38.183.170:8080/api/schedules",
-        #     params={"date": today},
-        #     headers={
-        #         "Authorization": "ACCESS_TOKEN",
-        #         "Refreshtoken": "REFRESH_TOKEN"
-        #     }
-        # )
-        #result = response.json()
-    
-        schedule_list = [
-            {"startTime": "2025-05-09T09:00:00", "content": "병원 진료"},
-            {"startTime": "2025-05-09T14:00:00", "content": "산책"},
-            {"startTime": "2025-05-09T18:00:00", "content": "가족과 식사"}
-        ]
+        today = datetime.today().strftime("%Y-%m-%d")
+
+        base_url = os.getenv("BASE_URL", "http://3.38.183.170:8080")
+        access_token = os.getenv("ACCESS_TOKEN")
+        refresh_token = os.getenv("REFRESH_TOKEN")
+
+        response = requests.get(
+            f"{base_url}/api/schedules",
+            params={"date": today},
+            headers={
+                "Authorization": "ACCESS_TOKEN",
+                "Refreshtoken": "REFRESH_TOKEN"
+            }
+        )
+        result = response.json()
+        schedule_list = result.get("data", [])
 
         if not schedule_list:
             return "오늘은 따로 정해진 일정이 없어요~"
@@ -32,3 +35,5 @@ def fetch_today_schedule() -> str:
     except Exception as e:
         print("일정 조회 실패:", e)
         return "일정 정보를 불러오지 못했어요."
+
+
