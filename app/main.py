@@ -1,8 +1,19 @@
 from fastapi import FastAPI
+from app.routers.chatbot import router as chatbot_router
+
+  
 from dotenv import load_dotenv
 import os
 from app.routers import stt_schedule, stt_raw, emergency_detection
 from app.routers.tts import router as tts_router
+
+app = FastAPI()
+
+app.include_router(chatbot_router)
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, this is the chatbot API!"}
 
 # .env 환경 변수 로드
 load_dotenv()
@@ -24,3 +35,4 @@ app.include_router(stt_schedule.router, prefix="/api/ai", tags=["STT"])
 app.include_router(stt_raw.router, prefix="/api/ai", tags=["STT"])
 app.include_router(emergency_detection.router, prefix="/api/ai", tags=["Emergency"])
 app.include_router(tts_router)
+
