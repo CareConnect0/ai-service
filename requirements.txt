@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+google-cloud-speech
+openai
+python-dotenv
+gtts
