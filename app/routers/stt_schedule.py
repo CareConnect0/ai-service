@@ -1,8 +1,13 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException, status, Response
 from app.services.stt_schedule_service import transcribe_audio
 from app.utils.response import success_response, error_response
+import traceback
 
 router = APIRouter()
+
+# 최대 파일 크기 제한 (5MB)
+MAX_FILE_SIZE_MB = 5
+MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024  # 바이트 단위
 
 @router.post(
     "/stt/schedule",
@@ -25,9 +30,18 @@ async def handle_stt(
     
     try:
         contents = await file.read()
+
+        # 파일 크기 체크 (5MB 초과 시 예외)
+        if len(contents) > MAX_FILE_SIZE:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response(f"파일 크기가 {MAX_FILE_SIZE_MB}MB를 초과했습니다.", 400)
+
         transcript = transcribe_audio(contents)
         return success_response(transcript, status_code=200)
     except Exception as e:
+        # 예외 메시지 출력
+        print("STT 처리 중 예외 발생:", str(e))
+        traceback.print_exc()  # 전체 에러 스택 출력
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return error_response("음성 인식 중 오류가 발생했습니다.", 500)
 
