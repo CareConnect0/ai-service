@@ -15,10 +15,15 @@ def transcribe_audio(file_bytes: bytes) -> str:
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
             # sample_rate_hertz=16000,
-            language_code="ko-KR"
+            language_code="ko-KR",
+            enable_automatic_punctuation=True
         )
 
-        response = client.recognize(config=config, audio=audio)
+        # 비동기 방식으로 요청
+        operation = client.long_running_recognize(config=config, audio=audio)
+
+        # 최대 300초 대기 (길이에 따라 조정 가능)
+        response = operation.result(timeout=300)
 
         if not response.results:
             return error_response("음성을 인식할 수 없습니다.", 400)
