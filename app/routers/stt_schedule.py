@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException, status, Response
 from app.services.stt_schedule_service import transcribe_audio
 from app.utils.response import success_response, error_response
+from app.utils.mono_converter import convert_audio_to_mono
 import traceback
 
 router = APIRouter()
@@ -35,8 +36,12 @@ async def handle_stt(
         if len(contents) > MAX_FILE_SIZE:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response(f"파일 크기가 {MAX_FILE_SIZE_MB}MB를 초과했습니다.", 400)
+        
+        # 스테레오 → 모노 변환
+        mono_contents = convert_audio_to_mono(contents)
 
-        transcript = transcribe_audio(contents)
+        transcript = transcribe_audio(mono_contents)
+        
         return success_response(transcript, status_code=200)
     except Exception as e:
         # 예외 메시지 출력
