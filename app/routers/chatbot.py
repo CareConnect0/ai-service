@@ -23,6 +23,19 @@ def get_bot_response(chat_request: ChatRequest):
 
     if "⚠️" in bot_reply:
         return ChatResponse(success=False, status_code=500, message=bot_reply)
+    
+    try:
+        response1 = requests.post(
+            f"{BASE_URL}/api/assistant/request",
+            headers=HEADERS,
+            json={
+                "roomId": room_id,
+                "requestMessage": user_message
+            }
+        )
+        print("사용자 메시지 저장:", response1.status_code)
+    except Exception as e:
+        print("사용자 메시지 저장 실패:", e)
 
     try:
         response2 = requests.post(
