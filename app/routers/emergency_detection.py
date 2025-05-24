@@ -2,6 +2,7 @@ from fastapi import APIRouter, File, UploadFile, Response, status
 from app.services.emergency_detection_service import detect_emergency_from_text
 from app.services.stt_raw_service import transcribe_audio
 from app.utils.response import success_response, error_response
+from app.utils.mono_converter import convert_audio_to_mono
 
 router = APIRouter()
 
@@ -25,10 +26,16 @@ async def handle_emergency(
 
     try:
         contents = await file.read()
-        transcript = transcribe_audio(contents)
 
+        try:
+            mono_contents = convert_audio_to_mono(contents)
+        except Exception as e:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response(f"오디오 모노 변환 실패: {str(e)}", 400)
+
+        transcript = transcribe_audio(mono_contents)
         if not isinstance(transcript, str):
-            return transcript  
+            return transcript
 
         is_emergency, keywords = detect_emergency_from_text(transcript)
 
