@@ -6,5 +6,5 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     success: bool
-    status_code: int
+    statusCode: int
     message: str

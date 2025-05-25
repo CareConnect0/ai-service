@@ -23,7 +23,7 @@ def get_bot_response(chat_request: ChatRequest):
     bot_reply = ask_gpt(gpt_prompt)
 
     if "⚠️" in bot_reply:
-        return ChatResponse(success=False, status_code=500, message=bot_reply)
+        return ChatResponse(success=False, statusCode=500, message=bot_reply)
     
     try:
         response1 = requests.post(
@@ -37,20 +37,24 @@ def get_bot_response(chat_request: ChatRequest):
                 "requestMessage": user_message
             }
         )
-        print("사용자 메시지 저장:", response1.status_code)
+        print("사용자 메시지 저장:", response1.statusCode)
     except Exception as e:
         print("사용자 메시지 저장 실패:", e)
 
     try:
         response2 = requests.post(
             f"{BASE_URL}/api/assistant/response",
+            headers={
+        "Authorization": ACCESS_TOKEN,
+        "Refreshtoken": REFRESH_TOKEN
+    },
             json={
                 "roomId": room_id,  
                 "responseMessage": bot_reply
             }
         )
-        print("GPT 응답 저장:", response2.status_code)
+        print("GPT 응답 저장:", response2.statusCode)
     except Exception as e:
         print("GPT 응답 저장 실패:", e)
 
-    return ChatResponse(success=True, status_code=200, message=bot_reply)
+    return ChatResponse(success=True, statusCode=200, message=bot_reply)
