@@ -7,11 +7,11 @@ import os
 
 router = APIRouter()
 
-BASE_URL = os.getenv("BASE_URL", "http://3.38.183.170:8080")
+BASE_URL = os.getenv("BASE_URL", "http://54.180.31.196")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 
-@router.post("/api/ai/assistant", response_model=ChatResponse)
+@router.post("/assistant", response_model=ChatResponse)
 def get_bot_response(chat_request: ChatRequest):
     user_message = chat_request.user_input
     room_id = chat_request.roomId
@@ -27,7 +27,7 @@ def get_bot_response(chat_request: ChatRequest):
     
     try:
         response1 = requests.post(
-            f"{BASE_URL}/api/assistant/request",
+            f"{BASE_URL}/api/ai/assistant/request",
             headers={
                 "Authorization": ACCESS_TOKEN,
                 "Refreshtoken": REFRESH_TOKEN
@@ -43,7 +43,7 @@ def get_bot_response(chat_request: ChatRequest):
 
     try:
         response2 = requests.post(
-            f"{BASE_URL}/api/assistant/response",
+            f"{BASE_URL}/api/ai/assistant/response",
             headers={
         "Authorization": ACCESS_TOKEN,
         "Refreshtoken": REFRESH_TOKEN

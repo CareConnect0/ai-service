@@ -19,7 +19,7 @@ app = FastAPI(
 )
 
 # 라우터 등록
-app.include_router(chatbot_router, tags=["AI Assistant"])
+app.include_router(chatbot_router, prefix="/api/ai", tags=["AI Assistant"])
 app.include_router(stt_schedule.router, prefix="/api/ai", tags=["STT"])
 app.include_router(stt_raw.router, prefix="/api/ai", tags=["STT"])
 app.include_router(emergency_detection.router, prefix="/api/ai", tags=["Emergency"])

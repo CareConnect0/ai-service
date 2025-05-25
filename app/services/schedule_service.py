@@ -9,7 +9,7 @@ def fetch_today_schedule() -> str:
     try:
         today = datetime.today().strftime("%Y-%m-%d")
 
-        base_url = os.getenv("BASE_URL", "http://3.38.183.170:8080")
+        base_url = os.getenv("BASE_URL", "http://54.180.31.196")
         access_token = os.getenv("ACCESS_TOKEN")
         refresh_token = os.getenv("REFRESH_TOKEN")
 
