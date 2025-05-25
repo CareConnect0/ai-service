@@ -17,8 +17,8 @@ def fetch_today_schedule() -> str:
             f"{base_url}/api/schedules",
             params={"date": today},
             headers={
-                "Authorization": "ACCESS_TOKEN",
-                "Refreshtoken": "REFRESH_TOKEN"
+                "Authorization": access_token,
+                "Refreshtoken": refresh_token
             }
         )
         result = response.json()

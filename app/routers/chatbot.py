@@ -8,17 +8,18 @@ import os
 router = APIRouter()
 
 BASE_URL = os.getenv("BASE_URL", "http://3.38.183.170:8080")
-HEADERS = {
-    "Authorization": os.getenv("ACCESS_TOKEN", "임시_ACCESS_TOKEN"),
-    "Refreshtoken": os.getenv("REFRESH_TOKEN", "임시_REFRESH_TOKEN")
-
-}
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 
 @router.post("/api/ai/assistant", response_model=ChatResponse)
 def get_bot_response(chat_request: ChatRequest):
     user_message = chat_request.user_input
     room_id = chat_request.roomId
-    gpt_prompt = fetch_today_schedule() if "일정" in user_message or "할일" in user_message else user_message
+    gpt_prompt = (
+        fetch_today_schedule() 
+        if "일정" in user_message or "할일" in user_message 
+        else user_message
+    )
     bot_reply = ask_gpt(gpt_prompt)
 
     if "⚠️" in bot_reply:
@@ -27,7 +28,10 @@ def get_bot_response(chat_request: ChatRequest):
     try:
         response1 = requests.post(
             f"{BASE_URL}/api/assistant/request",
-            headers=HEADERS,
+            headers={
+                "Authorization": ACCESS_TOKEN,
+                "Refreshtoken": REFRESH_TOKEN
+            },
             json={
                 "roomId": room_id,
                 "requestMessage": user_message
@@ -40,9 +44,8 @@ def get_bot_response(chat_request: ChatRequest):
     try:
         response2 = requests.post(
             f"{BASE_URL}/api/assistant/response",
-            headers=HEADERS,
             json={
-                "roomId": 1,  
+                "roomId": room_id,  
                 "responseMessage": bot_reply
             }
         )
