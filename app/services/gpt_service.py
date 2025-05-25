@@ -1,14 +1,14 @@
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
+client = OpenAI(api_key=os.getenv("API_KEY"))
 
 def ask_gpt(message: str) -> str:
-    api_key = os.getenv("API_KEY")
-    openai.api_key = os.getenv("API_KEY")
+
     try:
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "너는 노인분들의 일정을 친절하고 따뜻하게 안내하는 ai 비서야. 일정을 부드럽게 설명해줘."},
